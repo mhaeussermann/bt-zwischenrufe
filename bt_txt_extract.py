@@ -6,6 +6,7 @@ file_list = []
 klammern = []
 zwischenrufe = []
 klammern_clean = []
+klammern_cleaner = []
 zwischenruf_trigger = "]:"
 
 # Open all Parlamentsprotokolle
@@ -28,8 +29,9 @@ for x in zwischenrufe:
 
 # Clean the text
 for word in klammern:
-    klammern_clean.append(word.replace('\n', ' ').replace('-\n', '').replace('-\n\n', '').replace('\n\n', '').replace('\r\n', '').replace('- ','').replace('   ', ' ').replace('  ', ' ').replace('-  ', ''))
-
-with open('zwischenruf-clean.txt', 'w') as f:
-    for item in klammern_clean:
+    klammern_clean.append(word.replace('-\n\n', ''))
+for word in klammern_clean:
+    klammern_cleaner.append(word.replace('\n', ' ').replace('-\n', '').replace('\n\n', '').replace('\r\n', '').replace('- ','').replace('   ', ' ').replace('  ', ' ').replace('-  ', ''))
+with open('zwischenruf-cleaner.txt', 'w') as f:
+    for item in klammern_cleaner:
         f.write("%s\n" % item)
