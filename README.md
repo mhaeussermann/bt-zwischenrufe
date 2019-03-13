@@ -1,0 +1,2 @@
+# bt-zwischenrufe
+Quick little code to extract so-called Zwischenrufe – basically interruptions - from the official PDF protocols and clean them to use the results in further analysis as well as dissemination through a [Twitter bot](https://twitter.com/bt_zwischenrufe). The bot uses hugovk's [randomsentencebot](https://github.com/hugovk/randomsentencebot) to randomly tweet out Zwischenrufe. At the moment, the code is not really efficient, but it does the job.
