@@ -29,7 +29,7 @@ for x in zwischenrufe:
 
 # Clean the text
 for word in klammern:
-    klammern_clean.append(word.replace('-\n\n', ''))
+    klammern_clean.append(word.replace('-\n', ''))
 for word in klammern_clean:
     klammern_cleaner.append(word.replace('\n', ' ').replace('-\n', '').replace('\n\n', '').replace('\r\n', '').replace('- ','').replace('   ', ' ').replace('  ', ' ').replace('-  ', ''))
 with open('zwischenruf-cleaner.txt', 'w') as f:
