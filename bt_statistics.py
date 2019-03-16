@@ -3,6 +3,7 @@ import os
 import re
 from collections import OrderedDict
 import csv
+from xml.etree import ElementTree as ET
 
 file_list = []
 zwischenruf_trigger = "]:"
@@ -18,41 +19,34 @@ for filepath in glob.glob('Perioden/*/*.xml'):
 for item in file_list:
     klammern = []
     zwischenrufe_data = OrderedDict()
-    print(os.path.basename(item)[:5])
+    # Add data on Bundestagsperiode and Sitzungsnummer
+    zwischenrufe_data["Bundestagsperiode"] = os.path.basename(item)[0:2]
+    zwischenrufe_data["Sitzung"] = os.path.basename(item)[2:5]
     with open(item) as file:  
-        data = file.read() 
-        zwischenrufe_data["Sitzung"] = os.path.basename(item)[:5]
+        data = file.read()
+        root = ET.fromstring(data)
+        # Add data on Sitzungsdatum
+        zwischenrufe_data["Datum"] = root.find('DATUM').text
+        # Extract Zwischenrufe and add their count
         zwischenrufe = re.findall(r'\(([^\)]+)\)', data)
         for x in zwischenrufe:
                 if zwischenruf_trigger in x:
                     klammern.append(x.replace('-\n', '').replace('\n', ' '))
         zwischenrufe_data["Zwischenrufe"] = str(len(klammern))
-        applaus = re.findall(r'\([^()]*?Beifall[^()]*\)', data.replace('-\n', '').replace('\n', ' '))
-        zwischenrufe_data["Applaus"] = str(len(applaus))
+        # Extract protocolar mentions of Beifall and add their count 
+        beifall = re.findall(r'\([^()]*?Beifall[^()]*\)', data.replace('-\n', '').replace('\n', ' '))
+        zwischenrufe_data["Beifall"] = str(len(beifall))
+        # Extract protocolar mentions of Heiterkeit and add their count 
         heiterkeit = re.findall(r'\([^()]*?Heiterkeit[^()]*\)', data.replace('-\n', '').replace('\n', ' '))
         zwischenrufe_data["Heiterkeit"] = str(len(heiterkeit))
         # Create List of Dictionaries
         statistik.append(zwischenrufe_data)
+        # Print the data for testing
         #print(statistik)
 
-# Write the list of dicts to a TSV file
-outfilename = "Perioden/statistik.csv"
-#with open(outfilename, "w") as outfile:    
-    
-    # Write the rows using the values of the dictionaries
-    #for row in statistik:
-        #column_values = row.values()
-        #line = ",".join(column_values) + '\n'
-        #outfile.write(line)
-
+# Write the list of dicts to a CSV file
+outfilename = "bt_statistik.csv"
 with open(outfilename, 'w') as outfile:
     fp = csv.DictWriter(outfile, statistik[0].keys())
     fp.writeheader()
     fp.writerows(statistik)
-
-#import matplotlib.pyplot as plt
-
-#plt.bar(range(len(statistik)), list(statistik.values()), align='center')
-#plt.xticks(range(len(statistik)), list(statistik.keys()))
-
-#plt.show()
