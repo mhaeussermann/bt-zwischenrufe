@@ -1,15 +1,12 @@
-# -*- coding: utf-8 -*-
 import glob
 import re
 
 file_list = []
-klammern = []
 zwischenrufe = []
-klammern_clean = []
-klammern_cleaner = []
+klammern = []
 zwischenruf_trigger = "]:"
 
-# Open all Parlamentsprotokolle
+# Save list of protocols
 for filepath in glob.glob('16/*.txt'):
     file_list.append(filepath)
 
@@ -19,19 +16,13 @@ for item in file_list:
         data = file.read() 
         zwischenrufe.append(re.findall(r'\(([^\)]+)\)', data))
 
-#print(zwischenrufe)
-
-# Extract the Zwischenrufe
+# Extract the Zwischenrufe and clean them
 for x in zwischenrufe:
     for amount in x:
         if zwischenruf_trigger in amount:
-            klammern.append(amount)
+            klammern.append(amountword.replace('\n', ' ').replace('-\n', '').replace('\n\n', '').replace('\r\n', '').replace('- ','').replace('   ', ' ').replace('  ', ' ').replace('-  ', ''))
 
-# Clean the text
-for word in klammern:
-    klammern_clean.append(word.replace('-\n', ''))
-for word in klammern_clean:
-    klammern_cleaner.append(word.replace('\n', ' ').replace('-\n', '').replace('\n\n', '').replace('\r\n', '').replace('- ','').replace('   ', ' ').replace('  ', ' ').replace('-  ', ''))
-with open('zwischenruf-cleaner.txt', 'w') as f:
-    for item in klammern_cleaner:
-        f.write("%s\n" % item)
+# Save cleaned text 
+with open('zwischenruf-cleaned.txt', 'w') as f:
+  for item in klammern:
+    f.write("%s\n" % item)
