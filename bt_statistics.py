@@ -44,6 +44,10 @@ for item in file_list:
         # Print the data for testing
         #print(statistik)
 
+        with open('zwischenruf-korpus.txt', 'a') as f:
+                for item in klammern:
+                        f.write("%s\n" % item)
+
 # Write the list of dicts to a CSV file
 outfilename = "bt_statistik.csv"
 with open(outfilename, 'w') as outfile:
