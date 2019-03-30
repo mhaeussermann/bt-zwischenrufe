@@ -31,13 +31,13 @@ for item in file_list:
         zwischenrufe = re.findall(r'\(([^\)]+)\)', data)
         for x in zwischenrufe:
                 if zwischenruf_trigger in x:
-                    klammern.append(x.replace('-\n', '').replace('\n', ' '))
+                    klammern.append(x.replace('\n', ' ').replace('- ', ''))
         zwischenrufe_data["Zwischenrufe"] = str(len(klammern))
         # Extract protocolar mentions of Beifall and add their count 
-        beifall = re.findall(r'\([^()]*?Beifall[^()]*\)', data.replace('-\n', '').replace('\n', ' '))
+        beifall = re.findall(r'\([^()]*?Beifall[^()]*\)', data.replace('\n', ' ').replace('- ', ''))
         zwischenrufe_data["Beifall"] = str(len(beifall))
         # Extract protocolar mentions of Heiterkeit and add their count 
-        heiterkeit = re.findall(r'\([^()]*?Heiterkeit[^()]*\)', data.replace('-\n', '').replace('\n', ' '))
+        heiterkeit = re.findall(r'\([^()]*?Heiterkeit[^()]*\)', data.replace('\n', ' ').replace('- ', ''))
         zwischenrufe_data["Heiterkeit"] = str(len(heiterkeit))
         # Create List of Dictionaries
         statistik.append(zwischenrufe_data)
